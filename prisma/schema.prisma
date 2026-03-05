@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Course {
+  id            String   @id @default(uuid())
+  track         String
+  level         String
+  thumbnailUrl  String?
+  isPublished   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  chapters      Chapter[]
+}
+
+model Chapter {
+  id        String @id @default(uuid())
+  courseId  String
+  order     Int
+
+  course    Course @relation(fields: [courseId], references: [id])
+  lectures  Lecture[]
+}
+
+model Lecture {
+  id            String @id @default(uuid())
+  chapterId     String
+  type          String
+  videoPublicId String?
+  durationSec   Int
+  order         Int
+
+  chapter Chapter @relation(fields: [chapterId], references: [id])
+}
+
+model Enrollment {
+  id              String @id @default(uuid())
+  userId          String
+  courseId        String
+  progressPercent Float  @default(0)
+}
+
+model LectureProgress {
+  id             String @id @default(uuid())
+  userId         String
+  lectureId      String
+  watchedSeconds Int
+  completed      Boolean @default(false)
+}
