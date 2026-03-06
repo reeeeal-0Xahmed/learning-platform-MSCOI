@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './infrastructure/cloudinary/cloudinary.module';
 import { SupabaseModule } from './infrastructure/supabase/supabase.module';
 import { RedisModule } from './infrastructure/redis/redis.module'
+import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler'
 @Module({
   imports: [
@@ -33,6 +34,10 @@ import { ThrottlerModule } from '@nestjs/throttler'
   EnrollmentsModule,
   ProgressModule,  
   AdminModule,
+  ConfigModule.forRoot({
+     isGlobal: true
+   })
+ 
 ],
   controllers: [AppController],
   providers: [AppService],

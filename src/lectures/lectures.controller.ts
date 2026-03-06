@@ -50,12 +50,12 @@ findByChapter(
   @Req() req: RequestWithUser
 ) {
 
-  const userId = req.user.userId
+  const userSub = req.user.userId
   const role = req.user.role
 
   return this.lecturesService.findByChapter(
     chapterId,
-    userId,
+    userSub,
     role
   )
 

@@ -42,10 +42,10 @@ export class ChaptersController {
     @Req() req: RequestWithUser
   ) {
 
-    const userId = req.user.userId
+    const userSub = req.user.userId
     const role = req.user.role
 
-    return this.chaptersService.findByCourse(courseId, userId, role)
+    return this.chaptersService.findByCourse(courseId, userSub, role)
   }
 
   @Patch(':id')
