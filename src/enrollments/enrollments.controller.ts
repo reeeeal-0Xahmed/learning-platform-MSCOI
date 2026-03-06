@@ -11,6 +11,7 @@ import { EnrollmentsService } from './enrollments.service'
 import { EnrollDto } from './dto/enroll.dto'
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import type { RequestWithUser } from '../common/INTERFACE/request-with-user.interface'
 
 @Controller('enrollments')
 export class EnrollmentsController {
@@ -19,25 +20,24 @@ export class EnrollmentsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  enroll(@Body() body: EnrollDto, @Req() req: any) {
+  enroll(@Body() body: EnrollDto, @Req() req: RequestWithUser) {
 
-    const userId = req.user.userId
+   const userSub = req.user.userId
 
     return this.enrollmentsService.enroll(
-      userId,
+      userSub,
       body.courseId
     )
 
   }
+@Get()
+@UseGuards(JwtAuthGuard)
+myCourses(@Req() req: RequestWithUser) {
 
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  myCourses(@Req() req: any) {
+  const userSub = req.user.userId
 
-    const userId = req.user.userId
+  return this.enrollmentsService.getUserEnrollments(userSub)
 
-    return this.enrollmentsService.getUserEnrollments(userId)
-
-  }
+}
 
 }

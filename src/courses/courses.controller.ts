@@ -22,14 +22,21 @@ export class CoursesController {
   constructor(private coursesService: CoursesService) {}
 
   @Get()
-  findAll() {
-    return this.coursesService.findAll()
-  }
+@UseGuards(JwtAuthGuard)
+findAll() {
+  return this.coursesService.findAll()
+}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.coursesService.findOne(id)
-  }
+@Get(':id')
+@UseGuards(JwtAuthGuard)
+findOne(@Param('id') id: string) {
+  return this.coursesService.findOne(id)
+}
+@Get(':id/content')
+@UseGuards(JwtAuthGuard)
+getContent(@Param('id') id: string) {
+  return this.coursesService.getCourseContent(id)
+}
 
 @Post()
 @UseGuards(JwtAuthGuard, RolesGuard)

@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common'
 import { CacheModule } from '@nestjs/cache-manager'
+import { redisStore } from 'cache-manager-ioredis-yet'
 
 @Module({
   imports: [
-    CacheModule.register({
+    CacheModule.registerAsync({
       isGlobal: true,
-      ttl: 60
+      useFactory: async () => ({
+        store: redisStore,
+        url: process.env.REDIS_URL,
+        ttl: 60
+      })
     })
   ]
 })

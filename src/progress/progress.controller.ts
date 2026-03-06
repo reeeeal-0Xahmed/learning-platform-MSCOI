@@ -11,6 +11,8 @@ import {
 import { ProgressService } from './progress.service'
 import { UpdateProgressDto } from './dto/update-progress.dto'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { Request } from 'express'
+import type { RequestWithUser } from '../common/INTERFACE/request-with-user.interface'
 
 @Controller('progress')
 export class ProgressController {
@@ -19,12 +21,12 @@ export class ProgressController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  update(@Body() body: UpdateProgressDto, @Req() req: any) {
+  update(@Body() body: UpdateProgressDto, @Req() req: RequestWithUser) {
 
-    const userId = req.user.userId
+    const userSub = req.user.userId
 
     return this.progressService.updateProgress(
-      userId,
+      userSub,
       body
     )
 
@@ -32,12 +34,12 @@ export class ProgressController {
 
   @Get(':lectureId')
   @UseGuards(JwtAuthGuard)
-  get(@Param('lectureId') lectureId: string, @Req() req: any) {
+  get(@Param('lectureId') lectureId: string, @Req() req: RequestWithUser) {
 
-    const userId = req.user.userId
+    const userSub = req.user.userId
 
     return this.progressService.getLectureProgress(
-      userId,
+      userSub,
       lectureId
     )
 

@@ -12,8 +12,28 @@ import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './infrastructure/cloudinary/cloudinary.module';
 import { SupabaseModule } from './infrastructure/supabase/supabase.module';
 import { RedisModule } from './infrastructure/redis/redis.module'
+import { ThrottlerModule } from '@nestjs/throttler'
 @Module({
-  imports: [CoursesModule,CloudinaryModule, SupabaseModule, AuthModule, ChaptersModule , PrismaModule, LecturesModule, EnrollmentsModule, ProgressModule, AdminModule, RedisModule],
+  imports: [
+      ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100
+      }
+    ]),
+  PrismaModule,
+  RedisModule,
+  CloudinaryModule,
+  SupabaseModule,
+  AuthModule,
+
+  CoursesModule,
+  ChaptersModule,
+  LecturesModule,
+  EnrollmentsModule,
+  ProgressModule,  
+  AdminModule,
+],
   controllers: [AppController],
   providers: [AppService],
    

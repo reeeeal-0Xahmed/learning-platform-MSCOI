@@ -2,7 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '../infrastructure/database/prisma.service'
 import { CreateChapterDto } from './dto/create-chapter.dto'
 import { UpdateChapterDto } from './dto/update-chapter.dto'
-
+import { Request } from 'express'
+import { Req } from '@nestjs/common'
+import { ForbiddenException } from '@nestjs/common'
 @Injectable()
 export class ChaptersService {
 
@@ -16,16 +18,34 @@ export class ChaptersService {
 
   }
 
-  async findByCourse(courseId: string) {
+async findByCourse(courseId: string, userId: string, role: string) {
 
-    return this.prisma.chapter.findMany({
-      where: { courseId },
-      include: {
-        lectures: true
+  if (role === 'STUDENT') {
+
+    const enrollment = await this.prisma.enrollment.findFirst({
+      where: {
+        userId,
+        courseId
       }
     })
 
+    if (!enrollment) {
+      throw new ForbiddenException('User not enrolled')
+    }
+
   }
+
+  return this.prisma.chapter.findMany({
+    where: { courseId },
+    orderBy: { order: 'asc' },
+    include: {
+      lectures: true
+    }
+  })
+
+}
+
+
 
   async update(id: string, data: UpdateChapterDto) {
 

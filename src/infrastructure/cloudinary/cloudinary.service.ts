@@ -1,33 +1,29 @@
 import { Injectable } from '@nestjs/common'
 import { v2 as cloudinary } from 'cloudinary'
+import { UploadApiResponse } from 'cloudinary'
 
 @Injectable()
 export class CloudinaryService {
 
-  constructor() {
+  async uploadVideo(file: Express.Multer.File): Promise<UploadApiResponse> {
 
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET
-    })
+    return new Promise((resolve, reject) => {
 
-  }
+      cloudinary.uploader.upload_stream(
+        {
+          resource_type: 'video'
+        },
+        (error, result) => {
 
-  async uploadVideo(file: string) {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(result as UploadApiResponse)
+          }
 
-    const result = await cloudinary.uploader.upload(file, {
-      resource_type: 'video'
-    })
+        }
+      ).end(file.buffer)
 
-    return result
-  }
-
-  getVideoUrl(publicId: string) {
-
-    return cloudinary.url(publicId, {
-      resource_type: 'video',
-      secure: true
     })
 
   }

@@ -23,11 +23,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
 
-    return {
-      userId: payload.userId,
-      email: payload.email,
-      role: payload.roles
-    }
-
+  return {
+    userId: payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
+    role: payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
   }
+
+}
 }

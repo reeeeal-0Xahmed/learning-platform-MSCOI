@@ -16,6 +16,7 @@ model Course {
   updatedAt     DateTime @updatedAt
 
   chapters      Chapter[]
+  enrollments   Enrollment[]
 }
 
 model Chapter {
@@ -43,6 +44,7 @@ model Enrollment {
   userId          String
   courseId        String
   progressPercent Float  @default(0)
+    course          Course @relation(fields: [courseId], references: [id])
 }
 
 model LectureProgress {
@@ -51,4 +53,5 @@ model LectureProgress {
   lectureId      String
   watchedSeconds Int
   completed      Boolean @default(false)
+  @@unique([userId, lectureId])
 }
